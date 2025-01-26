@@ -1,0 +1,28 @@
+{
+  "name": "coffeemugrecruitment",
+  "version": "1.0.0",
+  "description": "coffee mug recruitment task",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Skarr222/CoffeeMugRecruitment.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Skarr222/CoffeeMugRecruitment/issues"
+  },
+  "homepage": "https://github.com/Skarr222/CoffeeMugRecruitment#readme",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "joi": "^17.13.3",
+    "mongoose": "^8.9.5"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  }
+}
