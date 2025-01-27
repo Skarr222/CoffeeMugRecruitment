@@ -20,7 +20,8 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "joi": "^17.13.3",
-    "mongoose": "^8.9.5"
+    "mongoose": "^8.9.5",
+    "winston": "^3.17.0"
   },
   "devDependencies": {
     "typescript": "^5.7.3"
