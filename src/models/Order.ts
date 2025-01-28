@@ -6,9 +6,9 @@ interface Order extends Document {
   products: (typeof Product)[];
 }
 
-const ordersSchema: Schema<Order> = new mongoose.Schema({
+const orderSchema: Schema<Order> = new mongoose.Schema({
   customerId: { type: Number, required: true, maxLength: 50 },
   products: { type: [Product], required: true },
 });
 
-export const Order = mongoose.model<Order>("Order", ordersSchema);
+export const Order = mongoose.model<Order>("Order", orderSchema);
