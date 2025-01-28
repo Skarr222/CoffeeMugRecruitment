@@ -22,8 +22,9 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
     const products = await getProductsQuery();
 
     if (products.length === 0) {
-      next(new ResourceNotFoundError("No products found"));
+      throw new ResourceNotFoundError("No products found");
     }
+
     res.status(200).json(products);
   } catch (error: any) {
     next(new ServerError(error.message));
@@ -38,13 +39,13 @@ router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
     }).validate(req.params);
 
     if (error) {
-      next(new ValidationError(error.message));
+      throw new ValidationError(error.message);
     }
 
     // Fetch the product
     const product = await getProductQuery(req.params.id);
     if (!product) {
-      next(new ResourceNotFoundError("Product not found"));
+      throw new ResourceNotFoundError("Product not found");
     }
 
     res.status(200).json(product);
@@ -56,13 +57,14 @@ router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
 // POST /products
 router.post("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { error } = Joi.object(joiProductSchema).validate(req.body);
+    const { error } = joiProductSchema.validate(req.body);
     if (error) {
-      next(new ValidationError(error.message));
+      throw new ValidationError(error.message);
     }
+
     await createProductCommand(req.body);
 
-    res.status(201);
+    res.status(201).json("Product created");
   } catch (error: any) {
     next(new ServerError(error.message));
   }
@@ -79,7 +81,7 @@ router.post(
       }).validate(req.body, req.params);
 
       if (error) {
-        next(new ValidationError(error.message));
+        throw new ValidationError(error.message);
       }
 
       const product = await updateProductStockCommand(
@@ -99,17 +101,17 @@ router.post(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { error } = Joi.object({
-        stock: Joi.number().required(),
+        qty: Joi.number().required(),
         id: Joi.string().required,
       }).validate(req.body, req.params);
 
       if (error) {
-        next(new ValidationError(error.message));
+        throw new ValidationError(error.message);
       }
 
       await updateProductStockCommand(req.params.id, -req.body.stock);
 
-      res.status(200);
+      res.status(200).send();
     } catch (error: any) {
       next(new ServerError(error.message));
     }

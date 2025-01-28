@@ -1,7 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import { getOrderQuery, getOrdersQuery } from "../queryHandler/orderQuery";
 import { createOrderCommand } from "../commandHandler/ordersCommand";
-import { joiOrderSchema } from "../models/Order";
 import { ValidationError } from "../errorTypes/ValidationError";
 import { ResourceNotFoundError } from "../errorTypes/ResourceNotFoundError";
 import { ServerError } from "../errorTypes/ServerError";
@@ -14,7 +13,7 @@ router.get("/", async (req, res, next) => {
   try {
     const orders = await getOrdersQuery();
     if (orders.length === 0) {
-      next(new ResourceNotFoundError("No orders found"));
+      throw new ResourceNotFoundError("No orders found");
     }
 
     res.status(200).json(orders);
@@ -29,7 +28,7 @@ router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
     const { error } = Joi.object({ id: Joi.string() }).validate(req.params);
 
     if (error) {
-      next(new ValidationError(error.message));
+      throw new ValidationError(error.message);
     }
 
     const order = await getOrderQuery(req.params.id);
@@ -47,12 +46,15 @@ router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
 // POST /orders
 router.post("/", async (req, res, next) => {
   try {
-    const { error } = Joi.object(joiOrderSchema).validate(req.body);
+    const { error } = Joi.object({
+      customerId: Joi.string(),
+      products: Joi.array().items({ id: Joi.string(), qty: Joi.number() }),
+    }).validate(req.body);
     if (error) {
-      next(new ValidationError(error.message));
+      throw new ValidationError(error.message);
     }
     await createOrderCommand(req.body);
-    res.status(201);
+    res.status(201).send();
   } catch (error: any) {
     next(new ServerError(error.message));
   }

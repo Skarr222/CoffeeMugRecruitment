@@ -17,11 +17,13 @@ export const updateProductStockCommand = async (id: string, stock: number) => {
   }
 
   await product.save();
+  return { success: true, id: product.id, stock: product.stock };
 };
 
 export const createProductCommand = async (payload: Products) => {
   const product = new Product(payload);
   await product.save();
+  return { success: true };
 };
 
 export const deleteProductCommand = async (id: string) => {

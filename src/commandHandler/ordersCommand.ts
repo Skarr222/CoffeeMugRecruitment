@@ -2,25 +2,46 @@ import Joi, { types } from "joi";
 import { Order, Orders } from "../models/Order";
 import { Product } from "../models/Product";
 import { updateProductStockCommand } from "./productsCommand";
+import mongoose from "mongoose";
 
-interface CreateOrderPayload extends Orders {}
+interface CreateOrderPayload {
+  customerId: string;
+  products: { id: string; qty: number }[];
+}
 
 export const createOrderCommand = async (payload: CreateOrderPayload) => {
-  const order = new Order(payload);
+  const order = new Order({ customerId: payload.customerId, products: [] });
 
-  for (const product of order.products) {
+  for (const product of payload.products) {
+    console.log(product);
     const productFound = await Product.findById(product.id);
+
     if (!productFound) {
       throw new Error("Product not found");
     }
-    if (productFound.stock === 0) {
-      throw new Error("Product out of stock");
+    if (!productFound.stock) {
+      throw new Error("Product stock is not defined");
     }
-    await updateProductStockCommand(product.id, -1);
+    if (productFound.stock < product.qty) {
+      throw new Error("Insufficient stock for product: " + productFound.name);
+    }
+
+    order.products.push(new mongoose.Types.ObjectId(product.id));
+
+    try {
+      await updateProductStockCommand(product.id, -product.qty);
+    } catch (error) {
+      throw new Error(
+        "Failed to update stock for product: " + productFound.name
+      );
+    }
   }
+
   await order.save();
+  return { success: true, id: order.id };
 };
 
 export const deleteOrderCommand = async (id: string) => {
-  await Order.findOneAndDelete({ id });
+  await Order.findOneAndDelete({ id: id });
+  return { success: true, id };
 };
