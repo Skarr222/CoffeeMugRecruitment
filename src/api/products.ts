@@ -11,38 +11,48 @@ import { logger } from "../middlewares/logger";
 import { validateProduct } from "../middlewares/validateRequest";
 
 const router = express.Router();
+interface GetProductRequest {
+  params: { id: number };
+}
+interface GetProductResponse {
+  status: any;
+  json: any;
+}
 
 //* GET /products
-router.get("/", async (req, res) => {
+router.get("/", async (req, res, next) => {
   try {
     const products = await getAllProductsQuery();
     res.status(200).json(products);
   } catch (error: any) {
     logger.error(error.message);
     res.status(500).json({ message: "Internal server error" });
+    next(error);
     throw new Error(error.message);
   }
 });
 
-//* GET /products/:id
-router.get("/:id", async (req, res) => {
-  try {
-    const product = await getProductByIdQuery(req.params.id);
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });
+//* GET /product/:id
+router.get(
+  "/:id",
+  async (req: GetProductRequest, res: GetProductResponse, next) => {
+    try {
+      const product = await getProductByIdQuery(req.params.id);
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+      res.status(200).json(product);
+    } catch (error: any) {
+      logger.error(error.message);
+      res.status(500).json({ message: "Internal server error" });
+      next(error);
+      throw new Error(error.message);
     }
-    res.status(200).json(product);
-  } catch (error: any) {
-    logger.error(error.message);
-
-    res.status(500).json({ message: "Internal server error" });
-
-    throw new Error(error.message);
   }
-});
+);
 
 // POST /products
-router.post("/", async (req, res) => {
+router.post("/", async (req, res, next) => {
   try {
     const validationResult = validateProduct(req, res);
     if (validationResult?.statusCode === 300) {
@@ -52,15 +62,14 @@ router.post("/", async (req, res) => {
     res.status(201).json(product);
   } catch (error: any) {
     logger.error(error.message);
-
     res.status(500).json({ message: "Internal server error" });
-
+    next(error);
     throw new Error(error.message);
   }
 });
 
 // POST /products/:id/restock
-router.post("/:id/restock", async (req, res) => {
+router.post("/:id/restock", async (req, res, next) => {
   try {
     const product = await updateProductStockCommand(
       req.params.id,
@@ -70,12 +79,13 @@ router.post("/:id/restock", async (req, res) => {
   } catch (error: any) {
     logger.error(error.message);
     res.status(500).json({ message: "Internal server error" });
+    next(error);
     throw new Error(error.message);
   }
 });
 
 // POST /products/:id/sell
-router.post("/:id/sell", async (req, res) => {
+router.post("/:id/sell", async (req, res, next) => {
   try {
     const product = await updateProductStockCommand(
       req.params.id,
@@ -85,6 +95,7 @@ router.post("/:id/sell", async (req, res) => {
   } catch (error: any) {
     logger.error(error.message);
     res.status(500).json({ message: "Internal server error" });
+    next(error);
     throw new Error(error.message);
   }
 });

@@ -6,7 +6,7 @@ export const getAllProductsQuery = async () => {
   return products;
 };
 
-export const getProductByIdQuery = async (productId: string) => {
+export const getProductByIdQuery = async (productId: number) => {
   const product = await getProduct(productId);
   return product;
 };
