@@ -1,67 +1,47 @@
-import express from "express";
-import {
-  getAllProductsQuery,
-  getProductByIdQuery,
-} from "../queryHandler/productQuery";
+import express, { NextFunction, Request, Response } from "express";
+
 import {
   createProductCommand,
   updateProductStockCommand,
 } from "../commandHandler/productsCommand";
-import { logger } from "../middlewares/logger";
-import { validateProduct } from "../middlewares/validateRequest";
+import {
+  getProductQuery,
+  getProductsQuery,
+} from "../queryHandler/productQuery";
 
 const router = express.Router();
-interface GetProductRequest {
-  params: { id: string };
-}
-interface GetProductResponse {
-  status: any;
-  json: any;
-}
 
 //* GET /products
 router.get("/", async (req, res, next) => {
   try {
-    const products = await getAllProductsQuery();
+    const products = await getProductsQuery();
     res.status(200).json(products);
-  } catch (error: any) {
-    logger.error(error.message);
-    res.status(500).json({ message: "Internal server error" });
+    //TODO blagam nie uzywaj
+  } catch (error) {
     next(error);
   }
 });
 
 //* GET /product/:id
-router.get(
-  "/:id",
-  async (req: GetProductRequest, res: GetProductResponse, next) => {
-    try {
-      const product = await getProductByIdQuery(req.params.id);
-      if (!product) {
-        return res.status(404).json({ message: "Product not found" });
-      }
-      res.status(200).json(product);
-    } catch (error: any) {
-      logger.error(error.message);
-      res.status(500).json({ message: "Internal server error" });
-      next(error);
+//@ts-ignore
+router.get("/:id", async (req, res, next) => {
+  try {
+    const product = await getProductQuery(req.params.id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
     }
+    res.status(200).json(product);
+  } catch (error: any) {
+    next(error);
   }
-);
+});
 
 // POST /products
 router.post("/", async (req, res, next) => {
   try {
-    const validationResult = validateProduct(req, res);
-    if (validationResult?.statusCode === 300) {
-      next(validationResult);
-      return;
-    }
     const product = await createProductCommand(req.body);
     res.status(201).json(product);
   } catch (error: any) {
-    logger.error(error.message);
-    res.status(500).json({ message: "Internal server error" });
     next(error);
   }
 });
@@ -75,8 +55,6 @@ router.post("/:id/restock", async (req, res, next) => {
     );
     res.status(200).json(product);
   } catch (error: any) {
-    logger.error(error.message);
-    res.status(500).json({ message: "Internal server error" });
     next(error);
   }
 });
@@ -90,8 +68,6 @@ router.post("/:id/sell", async (req, res, next) => {
     );
     res.status(200).json(product);
   } catch (error: any) {
-    logger.error(error.message);
-    res.status(500).json({ message: "Internal server error" });
     next(error);
   }
 });

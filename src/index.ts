@@ -14,7 +14,6 @@ app.use(express.json());
 app.use("/products", productRoutes);
 app.use("/orders", orderRoutes);
 
-//@ts-ignore
 app.use(errorHandler);
 
 dataSourceConnection()

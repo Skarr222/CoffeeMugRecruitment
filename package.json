@@ -4,7 +4,7 @@
   "description": "coffee mug recruitment task",
   "main": "index.js",
   "scripts": {
-    "api": "tsc && node ./build/api/index.js"
+    "api": "tsc && node ./build/index.js"
   },
   "repository": {
     "type": "git",

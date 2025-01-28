@@ -1,6 +1,7 @@
+import Joi, { types } from "joi";
 import { Order, Orders } from "../models/Order";
 import { Product } from "../models/Product";
-import { updateProductStock } from "../repositories/productRepository";
+import { updateProductStockCommand } from "./productsCommand";
 
 interface CreateOrderPayload extends Orders {}
 
@@ -15,7 +16,11 @@ export const createOrderCommand = async (payload: CreateOrderPayload) => {
     if (productFound.stock === 0) {
       throw new Error("Product out of stock");
     }
-    await updateProductStock(product.id, -1);
+    await updateProductStockCommand(product.id, -1);
   }
-  await order.save();
+  return await order.save();
+};
+
+export const deleteOrderCommand = async (id: string) => {
+  await Order.findOneAndDelete({ id });
 };
