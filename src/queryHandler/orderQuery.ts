@@ -5,7 +5,7 @@ export const getOrdersQuery = async () => {
   return orders;
 };
 
-export const getOrderQuery = async (id: number) => {
+export const getOrderQuery = async (id: string) => {
   const order = await getOrder(id);
   return order;
 };

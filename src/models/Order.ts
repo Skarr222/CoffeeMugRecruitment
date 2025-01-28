@@ -1,14 +1,14 @@
-import mongoose, { Schema, Document } from "mongoose";
-import { Product } from "./Product";
+import mongoose, { Schema } from "mongoose";
+import { Product, Products } from "./Product";
 
-interface Order extends Document {
-  customerId: number;
-  products: (typeof Product)[];
+export interface Order {
+  customerId: string;
+  products: Products[];
 }
 
 const orderSchema: Schema<Order> = new mongoose.Schema({
-  customerId: { type: Number, required: true, maxLength: 50 },
+  customerId: { type: String, required: true, maxLength: 50 },
   products: { type: [Product], required: true },
 });
 
-export const Order = mongoose.model<Order>("Order", orderSchema);
+export const Order = mongoose.model("Order", orderSchema);

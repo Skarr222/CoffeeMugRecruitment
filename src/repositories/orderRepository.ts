@@ -4,7 +4,7 @@ export const getOrders = async () => {
   return await Order.find().populate("products.productId");
 };
 
-export const getOrder = async (id: number) => {
+export const getOrder = async (id: string) => {
   return await Order.findById(id).populate("products.productId");
 };
 
@@ -13,6 +13,6 @@ export const createOrder = async (payload: typeof Order) => {
   return await order.save();
 };
 
-export const deleteOrder = async (id: number) => {
+export const deleteOrder = async (id: string) => {
   await Order.findOneAndDelete({ id });
 };

@@ -12,7 +12,7 @@ import { validateProduct } from "../middlewares/validateRequest";
 
 const router = express.Router();
 interface GetProductRequest {
-  params: { id: number };
+  params: { id: string };
 }
 interface GetProductResponse {
   status: any;
@@ -56,6 +56,7 @@ router.post("/", async (req, res, next) => {
   try {
     const validationResult = validateProduct(req, res);
     if (validationResult?.statusCode === 300) {
+      next(validationResult);
       return;
     }
     const product = await createProductCommand(req.body);

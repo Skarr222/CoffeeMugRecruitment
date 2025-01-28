@@ -2,7 +2,7 @@ import { Product } from "../models/Product";
 
 export const getProducts = async () => await Product.find();
 
-export const getProduct = async (id: number) => await Product.findById(id);
+export const getProduct = async (id: string) => await Product.findById(id);
 
 export const createProduct = async (payload: typeof Product) => {
   const product = new Product(payload);
