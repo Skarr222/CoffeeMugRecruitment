@@ -1,9 +1,6 @@
-import { NextFunction, Response, Request, ErrorRequestHandler } from "express";
+import { NextFunction, Response, Request } from "express";
 import { logger } from "../utils/logger";
-
-export enum ErrorType {
-  ValidationError = "ValidationError",
-}
+import { ErrorType } from "../models/Enums";
 
 export const errorHandler = (
   err: Error,
@@ -14,7 +11,11 @@ export const errorHandler = (
   if (err.name === ErrorType.ValidationError) {
     res.status(400).send({ error: err.message });
   }
+  if (err.name === ErrorType.ResourceNotFoundError) {
+    res.status(404).send({ error: err.message });
+  }
+  if (err.name === ErrorType.ServerError) {
+    res.status(500).send({ error: err.message });
+  }
   logger.error(err.message);
-
-  res.status(500).send({ error: "Internal server error" });
 };

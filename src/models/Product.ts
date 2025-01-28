@@ -9,7 +9,7 @@ export interface Products {
   stock: number;
 }
 
-const productSchema = Joi.object({
+export const joiProductSchema = Joi.object({
   name: Joi.string().max(50).required(),
   description: Joi.string().max(50).required(),
   price: Joi.number().positive().required(),

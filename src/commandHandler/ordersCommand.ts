@@ -18,7 +18,7 @@ export const createOrderCommand = async (payload: CreateOrderPayload) => {
     }
     await updateProductStockCommand(product.id, -1);
   }
-  return await order.save();
+  await order.save();
 };
 
 export const deleteOrderCommand = async (id: string) => {

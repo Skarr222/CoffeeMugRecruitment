@@ -16,12 +16,12 @@ export const updateProductStockCommand = async (id: string, stock: number) => {
     throw new Error("Stock cannot be negative");
   }
 
-  return await product.save();
+  await product.save();
 };
 
 export const createProductCommand = async (payload: Products) => {
   const product = new Product(payload);
-  return await product.save();
+  await product.save();
 };
 
 export const deleteProductCommand = async (id: string) => {
