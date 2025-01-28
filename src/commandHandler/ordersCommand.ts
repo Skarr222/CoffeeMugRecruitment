@@ -1,8 +1,8 @@
-import { Order } from "../models/Order";
+import { Order, Orders } from "../models/Order";
 import { Product } from "../models/Product";
 import { updateProductStock } from "../repositories/productRepository";
 
-interface CreateOrderPayload extends Order {}
+interface CreateOrderPayload extends Orders {}
 
 export const createOrderCommand = async (payload: CreateOrderPayload) => {
   const order = new Order(payload);

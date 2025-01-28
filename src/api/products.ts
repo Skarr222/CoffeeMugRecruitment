@@ -28,7 +28,6 @@ router.get("/", async (req, res, next) => {
     logger.error(error.message);
     res.status(500).json({ message: "Internal server error" });
     next(error);
-    throw new Error(error.message);
   }
 });
 
@@ -46,7 +45,6 @@ router.get(
       logger.error(error.message);
       res.status(500).json({ message: "Internal server error" });
       next(error);
-      throw new Error(error.message);
     }
   }
 );
@@ -65,7 +63,6 @@ router.post("/", async (req, res, next) => {
     logger.error(error.message);
     res.status(500).json({ message: "Internal server error" });
     next(error);
-    throw new Error(error.message);
   }
 });
 
@@ -81,7 +78,6 @@ router.post("/:id/restock", async (req, res, next) => {
     logger.error(error.message);
     res.status(500).json({ message: "Internal server error" });
     next(error);
-    throw new Error(error.message);
   }
 });
 
@@ -97,7 +93,6 @@ router.post("/:id/sell", async (req, res, next) => {
     logger.error(error.message);
     res.status(500).json({ message: "Internal server error" });
     next(error);
-    throw new Error(error.message);
   }
 });
 

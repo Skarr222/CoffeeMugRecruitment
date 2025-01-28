@@ -4,7 +4,7 @@
   "description": "coffee mug recruitment task",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "api": "tsc && node ./build/api/index.js"
   },
   "repository": {
     "type": "git",

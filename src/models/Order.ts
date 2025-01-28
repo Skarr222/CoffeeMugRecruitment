@@ -1,12 +1,12 @@
 import mongoose, { Schema } from "mongoose";
 import { Product, Products } from "./Product";
 
-export interface Order {
+export interface Orders {
   customerId: string;
   products: Products[];
 }
 
-const orderSchema: Schema<Order> = new mongoose.Schema({
+const orderSchema: Schema<Orders> = new mongoose.Schema({
   customerId: { type: String, required: true, maxLength: 50 },
   products: { type: [Product], required: true },
 });

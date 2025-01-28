@@ -1,10 +1,10 @@
-import { Product } from "../models/Product";
+import { Product, Products } from "../models/Product";
 import {
   createProduct,
   updateProductStock,
 } from "../repositories/productRepository";
 
-export const createProductCommand = async (payload: typeof Product) => {
+export const createProductCommand = async (payload: Products) => {
   await createProduct(payload);
 };
 
