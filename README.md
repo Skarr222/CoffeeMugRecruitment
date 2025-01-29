@@ -5,11 +5,11 @@ This is a RESTful API built with Node.js and Express.js for managing an inventor
 ## Table of Contents
 
 - [Features](#Features)
-- [Technologies Used](#Technologies_Used)
-- [Getting Started](#Getting_Started)
-- [API Endpoints](#API_Endpoints)
-- [Example Requests](#Example_Requests)
-- [Error Handling](#Error_Handling)
+- [Technologies Used](#Technologies-Used)
+- [Getting Started](#Getting-Started)
+- [API Endpoints](#API-Endpoints)
+- [Example Requests](#Example-Requests)
+- [Error Handling](#Error-Handling)
 - [Logging](#Logging)
 
 # Features
