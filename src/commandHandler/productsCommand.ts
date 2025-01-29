@@ -1,0 +1,31 @@
+import { Product, Products } from "../models/Product";
+
+export const updateProductStockCommand = async (id: string, stock: number) => {
+  const product = await Product.findById(id);
+
+  if (!product) {
+    throw new Error("Product not found");
+  }
+  if (!product.stock) {
+    throw new Error("Product stock is not defined");
+  }
+
+  product.stock += stock;
+
+  if (product.stock < 0) {
+    throw new Error("Stock cannot be negative");
+  }
+
+  await product.save();
+  return { success: true, id: product.id, stock: product.stock };
+};
+
+export const createProductCommand = async (payload: Products) => {
+  const product = new Product(payload);
+  await product.save();
+  return { success: true };
+};
+
+export const deleteProductCommand = async (id: string) => {
+  await Product.findOneAndDelete({ id });
+};
