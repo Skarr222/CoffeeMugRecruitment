@@ -13,7 +13,6 @@ export const createOrderCommand = async (payload: CreateOrderPayload) => {
   const order = new Order({ customerId: payload.customerId, products: [] });
 
   for (const product of payload.products) {
-    console.log(product);
     const productFound = await Product.findById(product.id);
 
     if (!productFound) {

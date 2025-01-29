@@ -12,7 +12,7 @@ export const joiProductSchema = Joi.object({
   name: Joi.string().max(50).required(),
   description: Joi.string().max(50).required(),
   price: Joi.number().positive().required(),
-  stock: Joi.number().integer().min(0).required(),
+  stock: Joi.number().integer().min(0).required().strict(),
 });
 
 export const productsSchema = new mongoose.Schema({

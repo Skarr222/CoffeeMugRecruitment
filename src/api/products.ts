@@ -27,7 +27,7 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
 
     res.status(200).json(products);
   } catch (error: any) {
-    next(new ServerError(error.message));
+    next(error);
   }
 });
 
@@ -35,7 +35,7 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
 router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { error } = Joi.object({
-      id: Joi.string().required,
+      id: Joi.string().required().max(50),
     }).validate(req.params);
 
     if (error) {
@@ -50,11 +50,11 @@ router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
 
     res.status(200).json(product);
   } catch (error: any) {
-    next(new ServerError(error.message));
+    next(error);
   }
 });
 
-// POST /products
+//* POST /products
 router.post("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { error } = joiProductSchema.validate(req.body);
@@ -66,22 +66,29 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
 
     res.status(201).json("Product created");
   } catch (error: any) {
-    next(new ServerError(error.message));
+    next(error);
   }
 });
 
-// POST /products/:id/restock
+//* POST /products/:id/restock
 router.post(
   "/:id/restock",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { error } = Joi.object({
-        stock: Joi.number().required(),
-        id: Joi.string().required,
-      }).validate(req.body, req.params);
+      const bodySchema = Joi.object({
+        qty: Joi.number().positive().integer().strict().max(50),
+      });
+      const { error: bodyError } = bodySchema.validate(req.body);
+      if (bodyError) {
+        throw new ValidationError(bodyError.message);
+      }
 
-      if (error) {
-        throw new ValidationError(error.message);
+      const paramsSchema = Joi.object({
+        id: Joi.string().required().max(50),
+      });
+      const { error: paramsError } = paramsSchema.validate(req.params);
+      if (paramsError) {
+        throw new ValidationError(paramsError.message);
       }
 
       const product = await updateProductStockCommand(
@@ -90,30 +97,36 @@ router.post(
       );
       res.status(200).json(product);
     } catch (error: any) {
-      next(new ServerError(error.message));
+      next(error);
     }
   }
 );
 
-// POST /products/:id/sell
+//* POST /products/:id/sell
 router.post(
   "/:id/sell",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { error } = Joi.object({
-        qty: Joi.number().required(),
-        id: Joi.string().required,
-      }).validate(req.body, req.params);
-
-      if (error) {
-        throw new ValidationError(error.message);
+      const bodySchema = Joi.object({
+        qty: Joi.number().positive().integer().strict(),
+      });
+      const { error: bodyError } = bodySchema.validate(req.body);
+      if (bodyError) {
+        throw new ValidationError(bodyError.message);
       }
 
-      await updateProductStockCommand(req.params.id, -req.body.stock);
+      const paramsSchema = Joi.object({
+        id: Joi.string().required(),
+      });
+      const { error: paramsError } = paramsSchema.validate(req.params);
+      if (paramsError) {
+        throw new ValidationError(paramsError.message);
+      }
+      await updateProductStockCommand(req.params.id, -req.body.qty);
 
       res.status(200).send();
     } catch (error: any) {
-      next(new ServerError(error.message));
+      next(error);
     }
   }
 );

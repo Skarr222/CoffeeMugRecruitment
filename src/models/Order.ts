@@ -8,7 +8,7 @@ export interface Orders {
 }
 
 const orderSchema = new mongoose.Schema({
-  customerId: { type: String, required: true, maxLength: 50 },
+  customerId: { type: String, required: true, maxLength: 50, unique: true },
   products: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
 });
 
