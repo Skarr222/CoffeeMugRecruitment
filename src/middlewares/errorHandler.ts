@@ -1,6 +1,6 @@
 import { NextFunction, Response, Request } from "express";
 import { logger } from "../utils/logger";
-import { ErrorType } from "../models/Enums";
+import { ErrorType } from "../models/ErrorTypes";
 
 export const errorHandler = (
   err: Error,

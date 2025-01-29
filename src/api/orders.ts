@@ -1,10 +1,8 @@
 import express, { NextFunction, Request, Response } from "express";
 import { getOrderQuery, getOrdersQuery } from "../queryHandler/orderQuery";
 import { createOrderCommand } from "../commandHandler/ordersCommand";
-import { ValidationError } from "../errorTypes/ValidationError";
-import { ResourceNotFoundError } from "../errorTypes/ResourceNotFoundError";
-import { ServerError } from "../errorTypes/ServerError";
 import Joi from "joi";
+import { ResourceNotFoundError, ValidationError } from "../models/ErrorTypes";
 
 const router = express.Router();
 
@@ -17,7 +15,7 @@ router.get("/", async (req, res, next) => {
     }
 
     res.status(200).json(orders);
-  } catch (error: any) {
+  } catch (error) {
     next(error);
   }
 });
@@ -40,7 +38,7 @@ router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
     }
 
     res.status(200).json(order);
-  } catch (error: any) {
+  } catch (error) {
     next(error);
   }
 });
@@ -62,7 +60,7 @@ router.post("/", async (req, res, next) => {
 
     await createOrderCommand(req.body);
     res.status(201).send();
-  } catch (error: any) {
+  } catch (error) {
     next(error);
   }
 });

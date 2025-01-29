@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
-import { Products, productsSchema } from "./Product";
-import Joi from "joi";
+import { Products } from "./Product";
 
 export interface Orders {
   customerId: string;

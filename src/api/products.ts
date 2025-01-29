@@ -10,9 +10,7 @@ import {
 } from "../queryHandler/productQuery";
 import Joi from "joi";
 import { joiProductSchema } from "../models/Product";
-import { ValidationError } from "../errorTypes/ValidationError";
-import { ServerError } from "../errorTypes/ServerError";
-import { ResourceNotFoundError } from "../errorTypes/ResourceNotFoundError";
+import { ResourceNotFoundError, ValidationError } from "../models/ErrorTypes";
 
 const router = express.Router();
 
@@ -26,7 +24,7 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
     }
 
     res.status(200).json(products);
-  } catch (error: any) {
+  } catch (error) {
     next(error);
   }
 });
@@ -49,7 +47,7 @@ router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
     }
 
     res.status(200).json(product);
-  } catch (error: any) {
+  } catch (error) {
     next(error);
   }
 });
@@ -65,7 +63,7 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     await createProductCommand(req.body);
 
     res.status(201).json("Product created");
-  } catch (error: any) {
+  } catch (error) {
     next(error);
   }
 });
@@ -96,7 +94,7 @@ router.post(
         req.body.stock
       );
       res.status(200).json(product);
-    } catch (error: any) {
+    } catch (error) {
       next(error);
     }
   }
@@ -125,7 +123,7 @@ router.post(
       await updateProductStockCommand(req.params.id, -req.body.qty);
 
       res.status(200).send();
-    } catch (error: any) {
+    } catch (error) {
       next(error);
     }
   }

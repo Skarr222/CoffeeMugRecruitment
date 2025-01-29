@@ -1,5 +1,4 @@
-import Joi, { types } from "joi";
-import { Order, Orders } from "../models/Order";
+import { Order } from "../models/Order";
 import { Product } from "../models/Product";
 import { updateProductStockCommand } from "./productsCommand";
 import mongoose from "mongoose";
