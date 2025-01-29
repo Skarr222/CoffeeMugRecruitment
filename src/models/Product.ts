@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 export interface Products {
   name: string;
-  descritpion: string;
+  description: string;
   price: number;
   stock: number;
 }
@@ -17,7 +17,7 @@ export const joiProductSchema = Joi.object({
 
 export const productsSchema = new mongoose.Schema({
   name: { type: String, require: true, maxLength: 50 },
-  descritpion: { type: String, require: true, maxLength: 50 },
+  description: { type: String, require: true, maxLength: 50 },
   price: { type: Number, require: true, maxLength: 50 },
   stock: { type: Number, require: true, maxLength: 50 },
 });

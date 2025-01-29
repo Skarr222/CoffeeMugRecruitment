@@ -2,7 +2,17 @@
 
 This is a RESTful API built with Node.js and Express.js for managing an inventory of products. The API supports basic CRUD operations and includes business logic for managing stock levels and creating orders.
 
-## Features
+## Table of Contents
+
+- [Features](#Features)
+- [Technologies Used](#Technologies_Used)
+- [Getting Started](#Getting_Started)
+- [API Endpoints](#API_Endpoints)
+- [Example Requests](#Example_Requests)
+- [Error Handling](#Error_Handling)
+- [Logging](#Logging)
+
+# Features
 
 - **Product Management**:
 
@@ -33,9 +43,7 @@ This is a RESTful API built with Node.js and Express.js for managing an inventor
 - **Joi**: Schema description language and data validator for JavaScript.
 - **Winston**: Logging library for Node.js.
 
-## Project Structure
-
-## Getting Started
+# Getting Started
 
 ### Prerequisites
 
@@ -67,7 +75,7 @@ PORT=3000
    npm run api
    ```
 
-## API Endpoints
+# API Endpoints
 
 ### Products:
 
@@ -87,7 +95,7 @@ GET /orders/:id: Retrieve a specific order by ID.
 
 POST /orders: Create a new order.
 
-## Example Requests
+# Example Requests
 
 ### Create a Product:
 
@@ -116,7 +124,7 @@ curl -X POST http://localhost:3000/orders \
 }'
 ```
 
-## Error Handling
+# Error Handling
 
 #### The API returns appropriate HTTP status codes and error messages for various scenarios:
 
@@ -126,6 +134,6 @@ curl -X POST http://localhost:3000/orders \
 
 #### - 500 Internal Server Error: Server-side error.
 
-## Logging
+# Logging
 
 #### Logs are stored in combined.log and error.log files using Winston.
